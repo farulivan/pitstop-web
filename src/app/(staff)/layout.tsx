@@ -1,8 +1,5 @@
 import { redirect } from "next/navigation";
-import { getSession } from "@/lib/auth/get-session";
-import type { Role } from "@/lib/api/types";
-
-const STAFF_ROLES: Role[] = ["mechanic", "service_advisor", "owner"];
+import { getSession, requireRole } from "@/lib/auth";
 
 export default async function StaffLayout({
   children,
@@ -10,8 +7,8 @@ export default async function StaffLayout({
   children: React.ReactNode;
 }) {
   const session = await getSession();
-  if (!session) redirect("/login");
-  if (!STAFF_ROLES.includes(session.role)) redirect("/403");
+  const decision = requireRole(session, "staff");
+  if (decision.kind === "redirect") redirect(decision.to);
 
   return <>{children}</>;
 }

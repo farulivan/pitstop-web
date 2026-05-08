@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getSession } from "@/lib/auth/get-session";
+import { getSession, requireRole } from "@/lib/auth";
 
 export default async function CustomerLayout({
   children,
@@ -7,8 +7,8 @@ export default async function CustomerLayout({
   children: React.ReactNode;
 }) {
   const session = await getSession();
-  if (!session) redirect("/login");
-  if (session.role !== "customer") redirect("/dashboard");
+  const decision = requireRole(session, "customer");
+  if (decision.kind === "redirect") redirect(decision.to);
 
   return <>{children}</>;
 }

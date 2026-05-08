@@ -1,8 +1,7 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { SESSION_COOKIE } from "@/lib/auth";
 import { ApiError, type ApiErrorBody } from "./types";
-
-const SESSION_COOKIE = "pitstop_session";
 
 function getBaseUrl(): string {
   return process.env.API_BASE_URL ?? "http://localhost:8080";

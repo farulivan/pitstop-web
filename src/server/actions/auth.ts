@@ -2,19 +2,15 @@
 
 import { redirect } from "next/navigation";
 import { apiServer } from "@/lib/api/server";
-import { setSessionCookie, clearSessionCookie } from "@/lib/auth/cookies";
+import { setSessionCookie, clearSessionCookie, homeForRole } from "@/lib/auth";
 import { loginSchema } from "@/lib/schemas/auth";
-import type { AuthLoginResponse, Role } from "@/lib/api/types";
+import type { AuthLoginResponse } from "@/lib/api/types";
 import { ApiError } from "@/lib/api/types";
 
 export type LoginActionState = {
   error?: string;
   fieldErrors?: { email?: string; password?: string };
 };
-
-function homeForRole(role: Role): string {
-  return role === "customer" ? "/tickets" : "/dashboard";
-}
 
 export async function loginAction(
   _prev: LoginActionState,
